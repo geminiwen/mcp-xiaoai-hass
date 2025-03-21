@@ -1,12 +1,9 @@
 [project]
-version = "0.0.5"
+version = "0.0.1"
 name = "mcp-xiaoai-hass"
-description = "MCP server for publish wechat moments"
+description = "MCP server for xiaoai voice control"
 dependencies = [
     "mcp"
-]
-urls = [
-    "https://github.com/geminiwen/mcp-wechat-moments"
 ]
 authors = [
     {name = "Gemini Wen", email = "coffeesherk@gmail.com"}
@@ -15,7 +12,7 @@ requires-python = ">= 3.11"
 readme = "README.md"
 
 [project.scripts]
-mcp-wechat-moments = "moments.server:main"
+mcp-xiaoai-hass = "xiaoai.server:main"
 
 [tool.setuptools.package-data]
 "moments" = ["*.scpt"]

@@ -31,5 +31,4 @@ def execute_text_directive(text: str) -> str:
 
 
 def main():
-    print("OK")
     mcp.run()
