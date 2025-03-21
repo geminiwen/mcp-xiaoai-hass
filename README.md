@@ -19,4 +19,7 @@ Use client like Cherry Studio
 
 ![intro](misc/intro.png)
 
+Environment Variables:
+HASS_XIAOAI_ENTITY_ID=media_player.xiaomi_lx05_0ed6_play_control
+HASS_TOKEN=home_assistant_token
 

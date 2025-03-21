@@ -9,11 +9,16 @@ import json
 from mcp.server.fastmcp import FastMCP
 
 # Create an MCP server
-mcp = FastMCP("XiaoAi-Hass")
+mcp = FastMCP("XiaoAi")
 
-@mcp.tool()
+
+@mcp.tool(
+    description="Smart Home Assistant / 小爱同学，您的智能家居助手",
+)
 def execute_text_directive(text: str) -> str:
     url = "https://hass.home.geminiwen.com/api/services/xiaomi_miot/intelligent_speaker"
+    entity_id = os.getenv("HASS_XIAOAI_ENTITY_ID")
+    token = os.getenv("HASS_TOKEN")
     payload = {
         "entity_id": "media_player.xiaomi_lx05_0ed6_play_control",
         "execute": True,
@@ -22,12 +27,12 @@ def execute_text_directive(text: str) -> str:
     }
 
     headers = {
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZTgxN2NmMWM4OWY0OWU4YWQ1ZWJjNDhlNWM3MGIzZSIsImlhdCI6MTc0MjU3MDYxMywiZXhwIjoyMDU3OTMwNjEzfQ.FYvmR_VyMuYuByOgzHXr7RoQCOGpZTXWtKIvZqfIGlk",
+        "Authorization": f"Bearer {token}",
         "content-type": "application/json",
     }
     response = requests.post(url, json=payload, headers=headers)
     response.raise_for_status()
-    return response.text
+    return "OK"
 
 
 def main():
