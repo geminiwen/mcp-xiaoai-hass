@@ -16,11 +16,13 @@ mcp = FastMCP("XiaoAi")
     description="Smart Home Assistant / 小爱同学，您的智能家居助手",
 )
 def execute_text_directive(text: str) -> str:
-    url = "https://hass.home.geminiwen.com/api/services/xiaomi_miot/intelligent_speaker"
+    host = os.getenv("HASS_HOST")
     entity_id = os.getenv("HASS_XIAOAI_ENTITY_ID")
     token = os.getenv("HASS_TOKEN")
+
+    url = f"https://{host}/api/services/xiaomi_miot/intelligent_speaker"
     payload = {
-        "entity_id": "media_player.xiaomi_lx05_0ed6_play_control",
+        "entity_id": entity_id,
         "execute": True,
         "silent": True,
         "text": text,
