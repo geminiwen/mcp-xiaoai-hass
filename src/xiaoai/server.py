@@ -1,16 +1,11 @@
 # server.py
 import os
-import pathlib
-import shlex
-import subprocess
 import requests
-import json
 
 from mcp.server.fastmcp import FastMCP
 
 # Create an MCP server
-mcp = FastMCP("XiaoAi")
-
+mcp = FastMCP("mcp-xiaoai-hass")
 
 @mcp.tool(
     description="Smart Home Assistant / 小爱同学，您的智能家居助手",
