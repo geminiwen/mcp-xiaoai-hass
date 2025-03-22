@@ -18,13 +18,11 @@ Use uvx to install this packages
 # Configuration & Usage
 Use client like Cherry Studio
 
-![intro](misc/intro.png)
 
-Environment Variables:
+## Environment Variables
 HASS_HOST -- home assistant host
 HASS_XIAOAI_ENTITY_ID -- home assistant entity id
 HASS_TOKEN -- home assistant token
-
 
 eg:
 HASS_HOST=hass.home.geminiwen.com
