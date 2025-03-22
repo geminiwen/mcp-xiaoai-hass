@@ -1,9 +1,10 @@
 [project]
-version = "0.0.1"
+version = "0.0.2"
 name = "mcp-xiaoai-hass"
 description = "MCP server for xiaoai voice control"
 dependencies = [
-    "mcp"
+    "mcp",
+    "requests"
 ]
 authors = [
     {name = "Gemini Wen", email = "coffeesherk@gmail.com"}
