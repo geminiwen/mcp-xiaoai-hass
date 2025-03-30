@@ -67,7 +67,6 @@ def turn_off_light(entity_id: str) -> str:
     response.raise_for_status()
     return "OK"
 
-
 @mcp.tool(
     description="Turn On Climate in your home",
 )
@@ -84,7 +83,7 @@ def turn_on_climate(entity_id: str) -> str:
 @mcp.tool(
     description="Turn Off Climate in your home",
 )
-def turn_on_climate(entity_id: str) -> str:
+def turn_off_climate(entity_id: str) -> str:
     payload = {
         "entity_id": entity_id,
     }
@@ -118,6 +117,31 @@ def turn_off_switch(entity_id: str) -> str:
     response = execute_service("switch/turn_off", payload)
     response.raise_for_status()
     return "OK"
+
+
+@mcp.tool(
+    description="Get the state of entity"
+)
+def get_state_of_entity(entity_id: str) -> str:
+    host = os.getenv("HASS_HOST")
+    token = os.getenv("HASS_TOKEN")
+
+    url = f"https://{host}/api/states/{entity_id}"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "content-type": "application/json",
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.text
+
+
+@mcp.resource(
+    "entity://{entity_id}",
+)
+def get_state_of_entity_resource(entity_id: str) -> str:
+    """Get the state of entity"""
+    return get_state_of_entity(entity_id)
 
 
 def main():
