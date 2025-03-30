@@ -1,5 +1,7 @@
 # server.py
 import os
+from http.client import responses
+
 import requests
 from typing import Dict, Any
 
@@ -63,6 +65,34 @@ def turn_off_light(entity_id: str) -> str:
     }
 
     response = execute_service("light/turn_off", payload)
+    response.raise_for_status()
+    return "OK"
+
+
+@mcp.tool(
+    name="Turn On Climate",
+    description="Turn On Climate in your home",
+)
+def turn_on_climate(entity_id: str) -> str:
+    payload = {
+        "entity_id": entity_id,
+    }
+
+    response = execute_service("climate/turn_on", payload)
+    response.raise_for_status()
+    return "OK"
+
+
+@mcp.tool(
+    name="Turn Off Climate",
+    description="Turn Off Climate in your home",
+)
+def turn_on_climate(entity_id: str) -> str:
+    payload = {
+        "entity_id": entity_id,
+    }
+
+    response = execute_service("climate/turn_off", payload)
     response.raise_for_status()
     return "OK"
 
