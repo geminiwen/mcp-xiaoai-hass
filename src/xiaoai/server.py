@@ -97,5 +97,33 @@ def turn_on_climate(entity_id: str) -> str:
     return "OK"
 
 
+@mcp.tool(
+    name="Turn On Switch",
+    description="Turn On Switch in your home",
+)
+def turn_on_switch(entity_id: str) -> str:
+    payload = {
+        "entity_id": entity_id,
+    }
+
+    response = execute_service("switch/turn_on", payload)
+    response.raise_for_status()
+    return "OK"
+
+
+@mcp.tool(
+    name="Turn Off Switch",
+    description="Turn Off Switch in your home",
+)
+def turn_on_switch(entity_id: str) -> str:
+    payload = {
+        "entity_id": entity_id,
+    }
+
+    response = execute_service("switch/turn_off", payload)
+    response.raise_for_status()
+    return "OK"
+
+
 def main():
     mcp.run()
