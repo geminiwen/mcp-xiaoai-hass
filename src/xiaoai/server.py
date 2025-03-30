@@ -1,33 +1,68 @@
 # server.py
 import os
 import requests
+from typing import Dict, Any
 
 from mcp.server.fastmcp import FastMCP
 
 # Create an MCP server
-mcp = FastMCP("mcp-xiaoai-hass")
+mcp = FastMCP("Home Assistant")
 
-@mcp.tool(
-    description="Smart Home Assistant / 小爱同学，您的智能家居助手",
-)
-def execute_text_directive(text: str) -> str:
+
+def execute_service(service: str, payload: Dict[str, str]):
     host = os.getenv("HASS_HOST")
-    entity_id = os.getenv("HASS_XIAOAI_ENTITY_ID")
     token = os.getenv("HASS_TOKEN")
 
-    url = f"https://{host}/api/services/xiaomi_miot/intelligent_speaker"
+    url = f"https://{host}/api/services/{service}"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "content-type": "application/json",
+    }
+    response = requests.post(url, json=payload, headers=headers)
+    return response
+
+
+@mcp.tool(
+    name="Turn On Light",
+    description="Turn On Light in your home",
+)
+def turn_on_light(entity_id: str) -> str:
+    payload = {
+        "entity_id": entity_id
+    }
+
+    response = execute_service("light/turn_on", payload)
+    response.raise_for_status()
+    return "OK"
+
+
+@mcp.tool(
+    name="XiaoAi: XiaoMi Home Assistant / 小爱同学",
+    description="Xiao Mi Smart Voice Home Assistant / 小米家的小爱同学，您的智能语音家居助手",
+)
+def execute_voice_directive(text: str) -> str:
+    entity_id = os.getenv("HASS_XIAOAI_ENTITY_ID")
     payload = {
         "entity_id": entity_id,
         "execute": True,
         "silent": True,
         "text": text,
     }
+    response = execute_service("xiaomi_miot/intelligent_speaker", payload)
+    response.raise_for_status()
+    return "OK"
 
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "content-type": "application/json",
+
+@mcp.tool(
+    name="Turn Off Light",
+    description="Turn Off Light in your home",
+)
+def turn_off_light(entity_id: str) -> str:
+    payload = {
+        "entity_id": entity_id
     }
-    response = requests.post(url, json=payload, headers=headers)
+
+    response = execute_service("light/turn_off", payload)
     response.raise_for_status()
     return "OK"
 
