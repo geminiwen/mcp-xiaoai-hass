@@ -1,10 +1,9 @@
 # server.py
 import os
-from http.client import responses
+from typing import Dict, Annotated
+from pydantic.fields import Field
 
 import requests
-from typing import Dict, Any
-
 from mcp.server.fastmcp import FastMCP
 
 # Create an MCP server
@@ -25,11 +24,12 @@ def execute_service(service: str, payload: Dict[str, str]):
 
 
 @mcp.tool(
-    name="call_xiaoai",
     description="Xiao Mi Smart Voice Home Assistant, You can use natural language to directive it / "
                 "小米家的小爱同学，您的智能语音家居助手，您可以使用自然语言去命令它",
 )
-def call_xiaoai(command: str) -> str:
+def call_xiaoai(
+    command: Annotated[str, Field(description="Command to execute, should be natural language")]
+) -> str:
     entity_id = os.getenv("HASS_XIAOAI_ENTITY_ID")
     payload = {
         "entity_id": entity_id,
@@ -43,78 +43,79 @@ def call_xiaoai(command: str) -> str:
 
 
 @mcp.tool(
-    description="Turn On Light in your home",
+    description="Operate Light in your home",
 )
-def turn_on_light(entity_id: str) -> str:
+def operate_light(
+        entity_id: str,
+        action: Annotated[str, Field(description="action, should be turn_on or turn_off")]
+) -> str:
     payload = {
         "entity_id": entity_id
     }
 
-    response = execute_service("light/turn_on", payload)
+    response = execute_service(f"light/{action}", payload)
     response.raise_for_status()
     return "OK"
 
 
 @mcp.tool(
-    description="Turn Off Light in your home",
+    description="Operate climate in your home",
 )
-def turn_off_light(entity_id: str) -> str:
-    payload = {
-        "entity_id": entity_id
-    }
-
-    response = execute_service("light/turn_off", payload)
-    response.raise_for_status()
-    return "OK"
-
-@mcp.tool(
-    description="Turn On Climate in your home",
-)
-def turn_on_climate(entity_id: str) -> str:
+def operate_climate(
+        entity_id: str,
+        action: Annotated[str, Field(description="action, should be turn_on or turn_off")]
+) -> str:
     payload = {
         "entity_id": entity_id,
     }
 
-    response = execute_service("climate/turn_on", payload)
+    response = execute_service(f"climate/{action}", payload)
     response.raise_for_status()
     return "OK"
 
 
 @mcp.tool(
-    description="Turn Off Climate in your home",
+    description="Operate switch in your home",
 )
-def turn_off_climate(entity_id: str) -> str:
+def operate_switch(
+        entity_id: str,
+        action: Annotated[str, Field(description="action, should be turn_on or turn_off")]
+) -> str:
     payload = {
         "entity_id": entity_id,
     }
 
-    response = execute_service("climate/turn_off", payload)
+    response = execute_service(f"switch/{action}", payload)
     response.raise_for_status()
     return "OK"
 
 
 @mcp.tool(
-    description="Turn On Switch in your home",
+    description="press button in your home",
 )
-def turn_on_switch(entity_id: str) -> str:
+def press_button(
+    entity_id: Annotated[str, Field(description="the entity_id you will use")],
+) -> str:
     payload = {
         "entity_id": entity_id,
     }
 
-    response = execute_service("switch/turn_on", payload)
+    response = execute_service(f"button/press", payload)
     response.raise_for_status()
     return "OK"
 
 
 @mcp.tool(
-    description="Turn Off Switch in your home",
+    description="press input button in your home",
 )
-def turn_off_switch(entity_id: str) -> str:
+def press_input_button(
+    entity_id: Annotated[str, Field(description="the entity_id you will use")],
+) -> str:
     payload = {
         "entity_id": entity_id,
     }
 
-    response = execute_service("switch/turn_off", payload)
+    response = execute_service(f"input_button/press", payload)
     response.raise_for_status()
     return "OK"
 
